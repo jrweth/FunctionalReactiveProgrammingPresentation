@@ -1,0 +1,106 @@
+@charset "UTF-8";
+
+/* Resets and base styles from HTML5 Boilerplate */
+.table {
+    background-color: #ffffff;
+}
+.table td  {
+    border: 1px solid black;
+    padding: 10px;
+}
+.table th  {
+    border: 1px solid white;
+    background-color: #000000;
+    padding: 10px;
+}
+
+pre {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+
+pre, code, kbd, samp {
+  font-family: monospace, sans-serif;
+}
+
+
+
+pre {
+  margin-bottom: 1em;
+}
+
+pre {
+  white-space: pre;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  padding: 1em;
+  border: 1px solid #888;
+}
+
+
+pre {
+  border-color: #cde;
+  background: #fff;
+  position: relative;
+  z-index: auto;
+  border-radius: 5px;
+  /* http://nicolasgallagher.com/css-drop-shadows-without-images/ */
+}
+.csstransforms.boxshadow pre > :first-child:before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  background: #fff;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+.csstransforms.boxshadow pre:before, .csstransforms.boxshadow pre:after {
+  content: "";
+  position: absolute;
+  z-index: -2;
+  bottom: 15px;
+  width: 50%;
+  height: 20%;
+  max-width: 300px;
+  box-shadow: 0 15px 10px rgba(0, 1, 0, 0.7);
+}
+.csstransforms.boxshadow pre:before {
+  left: 10px;
+  -webkit-transform: rotate(-3deg);
+  -ms-transform: rotate(-3deg);
+  transform: rotate(-3deg);
+}
+.csstransforms.boxshadow pre:after {
+  right: 10px;
+  -webkit-transform: rotate(3deg);
+  -ms-transform: rotate(3deg);
+  transform: rotate(3deg);
+}
+
+code, pre code {
+  color: #789;
+}
+
+code strong, pre code strong {
+	color: #f66
+}
+blockquote img {
+	width: 150px;
+	height: 150px;
+	float: left;
+	margin-right: 20px;
+}
+blockquote {
+padding-bottom: 0.5em;
+padding-top: 0.5em;
+font-size: 1.5em;
+-webkit-margin-start: 5px;
+-webkit-margin-end: 5px;
+min-height: 150px;
+}

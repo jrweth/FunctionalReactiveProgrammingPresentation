@@ -1,0 +1,19 @@
+{
+  "name": "WebComponentsSandbox",
+  "version": "0.0.0",
+  "authors": [
+    "J. Reuben Wetherbee <jrweth@gmail.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "deck.js": "git://github.com/imakewebthings/deck.js.git#1.1.0",
+    "bacon": "~0.7.37"
+  }
+}

@@ -5,7 +5,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <meta name="viewport" content="width=1024, user-scalable=no">
 
-  <title>Web Components: The future of the Web</title>
+  <title>Functional Reactive Programming: Jump Into the STREAM!</title>
 
   <!-- Required stylesheet -->
   <link rel="stylesheet" media="screen" href="bower_components/deck.js/core/deck.core.css">
@@ -20,6 +20,7 @@
   <!-- Style theme. More available in /themes/style/ or create your own. -->
   <link rel="stylesheet" media="screen" href="bower_components/deck.js/themes/style/neon.css">
   <link rel="stylesheet" media="screen" href="css/neon_extra.css">
+  <link rel="stylesheet" media="screen" href="css/frp.css">
 
   <!-- Transition theme. More available in /themes/transition/ or create your own. -->
   <link rel="stylesheet" media="screen" href="bower_components/deck.js/themes/transition/horizontal-slide.css">
@@ -29,9 +30,7 @@
 
   <!-- Required Modernizr file -->
   <script src="bower_components/deck.js/modernizr.custom.js"></script>
-  <script src="bower_components/platform/platform.js"></script>
   
-  <link rel="import" href="say_hi_widget.html">
 </head>
 <body>
   <div class="deck-container">
@@ -58,40 +57,275 @@
 
     <!-- ############################################################################## -->
     <section class="slide">
-      <h2>The Fun Stuff</h2>
+      <h2>What is Functional Reactive Programming?</h2>
       <ul>
-        <li class="slide"><h3>Functional Reactive Programming</h3>
-            <ul>
-            </ul>
-        </li>
-        <li class="slide"><h3>Shadow DOM</h3>
-            <ul>
-            </ul>
-        </li>
-        <li class="slide"><h3>Templates</h3>
-        </li>
-        <li class="slide"><h3>Imports</h3>
-        </li>
+        <li class="slide"><div><strong>Not Imperative Programming</strong></div>
+	Wikipedia:  ...imperative programming changes state with commands in the source language, the most simple example being assignment. Imperative programming does have functions, not in the mathematical sense, but in the sense of subroutines. They can have side effects that may change the value of program state. Functions without return values therefore make sense. Because of this, they lack referential transparency, i.e. the same language expression can result in different values at different times depending on the state of the executing program.
+	</li>
       </ul>
     </section>
 
+
     <!-- ############################################################################## -->
     <section class="slide">
-        <h2>Shadow DOM: Style Encapsulation Rules</h2>
-        <ul>
-            <li><h3>CSS styles defined inside Shadow DOM are scoped to the ShadowRoot (i.e. don't bleed out)</h3></li>
-            <li><h3>CSS Selectors Do Not Cross the Shadow Boundry (i.e. don't bleed in)</h3></li>
-        </ul>
-        <pre><code>shadowRoot.innerHTML = '&lt;style&gt;h3 {color: red}&lt;/style&gt;&lt;h3&gt;Shadow Style&lt;/h3&gt;';</code></pre>
-        <shadow-styled></shadow-styled>
+      <h2>Variables vs Streams</h2>
+      <ul>
+        <li class="slide"><strong>Variable:</strong> snapshot of a value at a specific time</li>
+	    <li class="slide"><strong>Stream: </strong> all future values over time</li>
+      </ul>
     </section>
     
-   </div>
+    <!-- ############################################################################## -->
+    <section class="slide">
+        <h2>Example: Slider Position</h2>
+        <ul>
+            <li>If we think of Slider Position as a DOM variable, then we have to listen for it to change and then attach a function to handle the event.</li>
+            <li>If Slider Position is a stream, namely "the current position of the slider", we aren't listening for change but rather managing the stream.</li> 
+            
+<!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #333333">&lt;</span>input id<span style="color: #333333">=</span><span style="background-color: #fff0f0">&quot;slider&quot;</span> type<span style="color: #333333">=</span><span style="background-color: #fff0f0">&quot;range&quot;</span> min<span style="color: #333333">=</span><span style="background-color: #fff0f0">&quot;0&quot;</span> max<span style="color: #333333">=</span><span style="background-color: #fff0f0">&quot;1&quot;</span> step<span style="color: #333333">=</span><span style="background-color: #fff0f0">&quot;0.001&quot;</span> <span style="color: #333333">/&gt;</span>
+<span style="color: #333333">&lt;</span>span id<span style="color: #333333">=</span><span style="background-color: #fff0f0">&quot;sliderLabel&quot;</span><span style="color: #333333">&gt;</span>____<span style="color: #333333">&lt;</span><span>/span&gt;</span>
+</pre></div>
+
+            <section class="slider">
+                <input type="range" min="0" max="1" step="0.001">
+                <span class="label">____</span>
+            </section>
+        </ul>
+    </section>
+
+    <section class="slide">
+        <h2>Bacon.js commands: $.asEventStream</h2>
+        <ul>
+            <li><strong>$.asEventStream(event, function)</strong> creates an EventStream from events on a jQuery object.  Function should return the value desired for the strea object.  Function should return the value desired for the stream, for example:
+
+<!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #008800; font-weight: bold">var</span> $slider <span style="color: #333333">=</span> $(<span style="background-color: #fff0f0">&#39;#slider&#39;</span>);
+<span style="color: #008800; font-weight: bold">var</span> sliderValues <span style="color: #333333">=</span> $slider.asEventStream(<span style="background-color: #fff0f0">&#39;input&#39;</span>, <span style="color: #008800; font-weight: bold">function</span>(e) {
+    <span style="color: #008800; font-weight: bold">return</span> $(e.target).val();
+});
+</pre></div>
+
+
+
+            <section class="slider">
+                <input id="slider1" type="range" min="0" max="1" step="0.001">
+                <span id="sliderLabel1" class="label">____</span>
+            </section>
+            <article class="stream-visualizations">
+                <!--<h1>stream visualizations</h1>-->
+                <section class="streams" id="streams1"></section>
+            </article>
+
+            </li>
+        </ul>   
+    </section>
+
+
+    <section class="slide">
+        <h2>Bacon.js commands: EventStream.assign</h2>
+        <ul>
+            <li><strong>stream.assign($jqueryObject,jqueryMethod);</strong> (also stream.onValue) calls the method of the jquery Object and supplies the streamed value:
+
+
+<!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #008800; font-weight: bold">var</span> $slider <span style="color: #333333">=</span> $(<span style="background-color: #fff0f0">&#39;#slider&#39;</span>);
+<span style="color: #008800; font-weight: bold">var</span> sliderValues <span style="color: #333333">=</span> $slider.asEventStream(<span style="background-color: #fff0f0">&#39;input&#39;</span>, <span style="color: #008800; font-weight: bold">function</span>(e) {
+    <span style="color: #008800; font-weight: bold">return</span> $(e.target).val();
+});
+sliderValues.assign($sliderLabel, <span style="background-color: #fff0f0">&quot;text&quot;</span>);
+</pre></div>
+
+
+
+            <section class="slider">
+                <input id="slider2" type="range" min="0" max="1" step="0.001">
+                <span id="sliderLabel2" class="label">____</span>
+            </section>
+            <article class="stream-visualizations">
+                <!--<h1>stream visualizations</h1>-->
+                <section class="streams" id="streams2"></section>
+            </article>
+
+            </li>
+
+        </ul>
+    </section>
+   
+
+    <section class="slide">
+        <h2>Bacon.js commands: EventStream.map</h2>
+        <ul>
+            <li><strong>EventStream.map(function);</strong> Returns a new stream mapping all values through the supplied function
+
+a<!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #008800; font-weight: bold">var</span> $slider <span style="color: #333333">=</span> $(<span style="background-color: #fff0f0">&#39;#slider&#39;</span>);
+<span style="color: #008800; font-weight: bold">var</span> sliderValues <span style="color: #333333">=</span> $slider.asEventStream(<span style="background-color: #fff0f0">&#39;input&#39;</span>, <span style="color: #008800; font-weight: bold">function</span>(e) {
+    <span style="color: #008800; font-weight: bold">return</span> $(e.target).val();
+});
+<span style="color: #008800; font-weight: bold">var</span> floats <span style="color: #333333">=</span> sliderValues.map( <span style="color: #008800; font-weight: bold">function</span>(x){
+    <span style="color: #008800; font-weight: bold">return</span> <span style="color: #007020">parseFloat</span>(x);
+});
+floats.assign($sliderLabel, <span style="background-color: #fff0f0">&quot;text&quot;</span>);
+</pre></div>
+
+
+            <section class="slider">
+                <input id="slider3" type="range" min="0" max="1" step="0.001">
+                <span id="sliderLabel3" class="label">____</span>
+            </section>
+            <article class="stream-visualizations">
+                <!--<h1>stream visualizations</h1>-->
+                <section class="streams" id="streams3"></section>
+            </article>
+
+            </li>
+
+        </ul>
+    </section>   
+    <section class="slide">
+        <h2>Bacon.js commands: map a map</h2>
+        
+<!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #008800; font-weight: bold">var</span> $slider <span style="color: #333333">=</span> $(<span style="background-color: #fff0f0">&#39;#slider&#39;</span>);
+<span style="color: #008800; font-weight: bold">var</span> sliderValues <span style="color: #333333">=</span> $slider.asEventStream(<span style="background-color: #fff0f0">&#39;input&#39;</span>, <span style="color: #008800; font-weight: bold">function</span>(e) {
+    <span style="color: #008800; font-weight: bold">return</span> $(e.target).val();
+});
+<span style="color: #008800; font-weight: bold">var</span> floats <span style="color: #333333">=</span> sliderValues.map( <span style="color: #008800; font-weight: bold">function</span>(x){
+    <span style="color: #008800; font-weight: bold">return</span> <span style="color: #007020">parseFloat</span>(x);
+});
+<span style="color: #008800; font-weight: bold">var</span> formatted <span style="color: #333333">=</span> floats.map( <span style="color: #008800; font-weight: bold">function</span>(x){
+    <span style="color: #008800; font-weight: bold">return</span> <span style="background-color: #fff0f0">&quot;&quot;</span><span style="color: #333333">+</span>(<span style="color: #007020">Math</span>.round(x<span style="color: #333333">*</span><span style="color: #0000DD; font-weight: bold">100</span>))<span style="color: #333333">+</span><span style="background-color: #fff0f0">&quot;%&quot;</span>;
+});
+formatted.assign($label,<span style="background-color: #fff0f0">&quot;text&quot;</span>);
+</pre></div>
+
+            <section class="slider">
+                <input id="slider4" type="range" min="0" max="1" step="0.001">
+                <span id="sliderLabel4" class="label">____</span>
+            </section>
+            <article class="stream-visualizations">
+                <!--<h1>stream visualizations</h1>-->
+                <section class="streams" id="streams4"></section>
+            </article>
+
+
+    </section>   
+
+    <section class="slide">
+        <h2>Functional Programming: Why Streams beat Variables</h2>
+        <pre><code>A = 1;
+B = 2;
+C = A + B;
+print C;
+A = 3;
+print C;
+</code></pre>
+<ul>
+    <li class="slide">using variables: <strong>3, 3</strong></li>
+    <li class="slide">using stream: <strong>3, 5</strong></li>
+</ul>
+    </section>
+    <section class="slide">
+    <h2>Summing Slider Streams</h2>
+      <article class="summing-sliders">
+        <section class="slider a">
+          <input type="range" min="0" max="10" step="1">
+          <span class="label">__</span>
+        </section>
+        <section class="slider b">
+          <input type="range" min="0" max="10" step="1">
+          <span class="notation">+</span><span class="label">__</span>
+        </section>
+        <section class="sum">
+          <span class="notation">=</span><span class="label">__</span>
+        </section>
+      </article>
+<!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #007700">&lt;input</span> <span style="color: #0000CC">id=</span><span style="background-color: #fff0f0">&quot;sliderA&quot;</span> <span style="color: #0000CC">type=</span><span style="background-color: #fff0f0">&quot;range&quot;</span> <span style="color: #0000CC">min=</span><span style="background-color: #fff0f0">&quot;0&quot;</span> <span style="color: #0000CC">max=</span><span style="background-color: #fff0f0">&quot;10&quot;</span> <span style="color: #0000CC">step=</span><span style="background-color: #fff0f0">&quot;1&quot;</span><span style="color: #007700">&gt;</span>
+<span style="color: #007700">&lt;span</span> <span style="color: #0000CC">class=</span><span style="background-color: #fff0f0">&quot;labelA&quot;</span><span style="color: #007700">&gt;</span>___<span style="color: #007700">&lt;/span&gt;</span>
+
+<span style="color: #007700">&lt;input</span> <span style="color: #0000CC">id=</span><span style="background-color: #fff0f0">&quot;sliderB&quot;</span> <span style="color: #0000CC">type=</span><span style="background-color: #fff0f0">&quot;range&quot;</span> <span style="color: #0000CC">min=</span><span style="background-color: #fff0f0">&quot;0&quot;</span> <span style="color: #0000CC">max=</span><span style="background-color: #fff0f0">&quot;10&quot;</span> <span style="color: #0000CC">step=</span><span style="background-color: #fff0f0">&quot;1&quot;</span><span style="color: #007700">&gt;</span>
++<span style="color: #007700">&lt;span</span> <span style="color: #0000CC">id=</span><span style="background-color: #fff0f0">&quot;labelB&quot;</span><span style="color: #007700">&gt;</span>__<span style="color: #007700">&lt;/span&gt;</span>
+
+=<span style="color: #007700">&lt;span</span> <span style="color: #0000CC">id=</span><span style="background-color: #fff0f0">&quot;labelC&quot;</span><span style="color: #007700">&gt;</span>__<span style="color: #007700">&lt;/span&gt;</span>
+</pre></div>
+      
+
+    </section>
+    <section class="slide">
+      <h2>Step 1: setup sliderValuesA and sliderValuesB</h2>
+      
+
+      <article class="summing-sliders">
+        <section class="slider a">
+          <input id="slider5A" type="range" min="0" max="10" step="1">
+          <span id="label5A" class="label">__</span>
+        </section>
+        <section class="slider b">
+          <input id="slider5B" type="range" min="0" max="10" step="1">
+          <span class="notation">+</span><span id="label5B" class="label">__</span>
+        </section>
+        <section class="sum">
+          <span class="notation">=</span><span id="label5C" class="label">__</span>
+        </section>
+      </article>
+      <article class="stream-visualizations">
+        <!--<h1>stream visualizations</h1>-->
+        <section id="streams5">
+        </section>
+      </article>
+ 
+        
+    </section>
+    <section class="slide">
+        <h2>Step 2: Create SumValue stream using EventStream.combine()</h2>
+
+      <article class="summing-sliders">
+        <section class="slider a">
+          <input id="slider6A" type="range" min="0" max="10" step="1">
+          <span id="label6A" class="label">__</span>
+        </section>
+        <section class="slider b">
+          <input id="slider6B" type="range" min="0" max="10" step="1">
+          <span class="notation">+</span><span id="label6B" class="label">__</span>
+        </section>
+        <section class="sum">
+          <span class="notation">=</span><span id="label6C" class="label">__</span>
+        </section>
+      </article>
+<!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #008800; font-weight: bold">var</span> sumFloatValuesC<span style="color: #333333">=</span> floatValuesA.combine(floatValuesB, <span style="color: #008800; font-weight: bold">function</span>(a,b){
+    <span style="color: #008800; font-weight: bold">return</span> a <span style="color: #333333">+</span> b;
+});
+sumFloatValuesC.assign($labelC, <span style="background-color: #fff0f0">&quot;text&quot;</span>);
+</pre></div>
+
+
+      <article class="stream-visualizations">
+        <!--<h1>stream visualizations</h1>-->
+        <section id="streams6">
+        </section>
+      </article>
+
+    </section>
+    <section class="slide">
+        <h2>Other Important Stream Operations</h2>
+        <ul>
+            <li><strong>merge</strong> take two streams and merge them together so the resulting stream emits both events</li>
+            <li><strong>scan</strong> iterates a function over the emited values of a stream</li>
+            <li><strong>filter</strong> filters a stream based upon the filter function</li>
+        </ul>
+    </section>
+    <section class="slide">
+        <h2>More Examples from Pete Hodgson</h2>
+        <ul>
+            <li><a target="blank" href="http://frp-talk-examples.thepete.net/text-input.html">Form Validation</a></li>
+            <li><a target="blank" href="http://reactive-colors.thepete.net/">Color Picker</a></li>
+        </ul>
+        <img src="images/bacon_logo.png" alt="bacon.js image" />
+    </section>
+</div>
 
 <!-- Required JS files. -->
 <script src="bower_components/deck.js/jquery.min.js"></script>
 <script src="bower_components/deck.js/core/deck.core.js"></script>
-<script src="bower_components/bacon/dist/Bacon.min.js"</script>
+<script src="bower_components/bacon/dist/Bacon.min.js"></script>
+<script src="bower_components/d3/d3.js" charset="utf-8"></script>
+<script src="js/bacon-viz.js"></script>
 <!-- Extension JS files. Add or remove as needed. -->
 <script src="bower_components/deck.js/extensions/menu/deck.menu.js"></script>
 <script src="bower_components/deck.js/extensions/goto/deck.goto.js"></script>
@@ -106,5 +340,6 @@
   });
 </script>
 
+<script src="js/frp.js"></script>
 </body>
 </html>

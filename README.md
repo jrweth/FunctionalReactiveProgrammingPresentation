@@ -1,4 +1,4 @@
-WebComponentsPresentation
+Functional Reactive Programming Presentation
 =========================
 
 Presentation in Deck.js briefly highlighting Functional Reactive Programming.

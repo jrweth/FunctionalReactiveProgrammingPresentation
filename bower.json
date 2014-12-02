@@ -14,6 +14,7 @@
   ],
   "dependencies": {
     "deck.js": "git://github.com/imakewebthings/deck.js.git#1.1.0",
-    "bacon": "~0.7.37"
+    "bacon": "~0.7.37",
+    "d3": "~3.4.13"
   }
 }

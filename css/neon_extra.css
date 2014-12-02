@@ -50,38 +50,6 @@ pre {
   border-radius: 5px;
   /* http://nicolasgallagher.com/css-drop-shadows-without-images/ */
 }
-.csstransforms.boxshadow pre > :first-child:before {
-  content: "";
-  position: absolute;
-  z-index: -1;
-  background: #fff;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-}
-.csstransforms.boxshadow pre:before, .csstransforms.boxshadow pre:after {
-  content: "";
-  position: absolute;
-  z-index: -2;
-  bottom: 15px;
-  width: 50%;
-  height: 20%;
-  max-width: 300px;
-  box-shadow: 0 15px 10px rgba(0, 1, 0, 0.7);
-}
-.csstransforms.boxshadow pre:before {
-  left: 10px;
-  -webkit-transform: rotate(-3deg);
-  -ms-transform: rotate(-3deg);
-  transform: rotate(-3deg);
-}
-.csstransforms.boxshadow pre:after {
-  right: 10px;
-  -webkit-transform: rotate(3deg);
-  -ms-transform: rotate(3deg);
-  transform: rotate(3deg);
-}
 
 code, pre code {
   color: #789;
@@ -104,3 +72,4 @@ font-size: 1.5em;
 -webkit-margin-end: 5px;
 min-height: 150px;
 }
+
